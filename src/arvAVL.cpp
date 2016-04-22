@@ -152,6 +152,12 @@ void arvAVL::rmv(const int& valor) {
 }
 
 
+/*
+ * @TODO: Confirmação de que o valor buscado esteja na árvore, no momento entra em loop (recursão) infinito
+ *
+ *
+ */
+
 void arvAVL::rmv_AVL(int x, avlNo* &pt, bool &h) {
 	// Valor encontrado. Faz as operações de substituição do nó pelo seu sucessor, garantindo o balanceamento
 	if (pt->val == x) {
@@ -179,24 +185,48 @@ void arvAVL::rmv_AVL(int x, avlNo* &pt, bool &h) {
 
 	//Busca o valor a ser removido, se este pertencer a árvore.
 	// Chama as devidas rotações de balanceamento, quando o valor for removido.
-	/*else {
+	else {
 		if (pt == NULL) {
 			cout << "O no nao pertence a arvore!" << endl;
 			return;
 		}
 		if (x < pt->val) {
-			rmv_AVL(x, pt->esq, h);
+            rmv_AVL(x, pt->esq, h);
 			if (h == true)
 				switch (pt->fatBal){
+				    case -1:
+				        //fazer algo
+				        pt->fatBal = 0;
+                        break;
+                    case 0:
+                        //fazer algo
+                        pt->fatBal = 1;
+                        h = false;
+                        break;
+                    case 1:
+                        //fazer algo
+                        caso2(pt, h);
+                        break;
 				}
-
-            if (x > pt->val) {
-                rmv_AVL(x, pt->dir, h);
-                if (h == true)
-                    switch (pt->fatBal) 	{ ... }
-            }
 		}
-	}*/
+
+        if (x > pt->val) {
+            rmv_AVL(x, pt->dir, h);
+            if (h == true)
+                switch (pt->fatBal){
+                    case -1:
+                        //fazer algo
+                        break;
+                    case 0:
+                        //fazer algo
+                        break;
+                    case 1:
+                        //fazer algo
+                        break;
+                }
+        }
+    }
+
 }
 
 
