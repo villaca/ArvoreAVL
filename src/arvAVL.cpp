@@ -29,6 +29,11 @@ void arvAVL::inicio_no(avlNo* &no, int valor) {
 // insere um n� na �rvore, se este n�o existir ainda, e verifica o balanceamento da �rvore
 void arvAVL::ins_AVL(int x, avlNo* &pt, bool &h) {
 
+    /*cout << "cacete: ";
+	raiz->mostra();
+	cout << endl;
+    */
+
 	// Local do n� encontrado. Insere o novo n� na �rvore
 	if (pt == NULL) {
 		inicio_no(pt, x);
@@ -72,28 +77,30 @@ void arvAVL::caso1(avlNo* &pt, bool &h) {
 	ptu = pt->esq;
 
 	if (ptu->fatBal == -1) { // rota��o direita
+		pt->fatBal = 0;
 		pt->esq = ptu->dir;
 		ptu->dir = pt;
 
 		if (pt == raiz)
 			raiz = ptu;
 
-		pt->fatBal = 0;
 		pt = ptu;
 	}
 	else { // rota��o dupla direita
-		aux = ptu->dir;
+
+        aux = ptu->dir;
 		ptu->dir = aux->esq;
 		aux->esq = ptu;
 		pt->esq = aux->dir;
 		aux->dir = pt;
 
-		if (aux->fatBal = -1)
-			pt->fatBal = 1;
-		else
-			pt->fatBal = 0;
 
-		if (aux->fatBal = 1)
+		if (aux->fatBal == -1)
+            pt->fatBal = 1;
+		else
+            pt->fatBal = 0;
+
+		if (aux->fatBal == 1)
 			ptu->fatBal = -1;
 		else
 			ptu->fatBal = 0;
@@ -101,6 +108,7 @@ void arvAVL::caso1(avlNo* &pt, bool &h) {
 		pt = aux;
 	}
 	pt->fatBal = 0;
+
 	h = false;
 }
 
@@ -110,13 +118,13 @@ void arvAVL::caso2(avlNo* &pt, bool &h) {
 	ptu = pt->dir;
 
 	if (ptu->fatBal == 1) { // rota��o esquerda
+		pt->fatBal = 0;
 		pt->dir = ptu->esq;
 		ptu->esq = pt;
 
 		if (pt == raiz)
 			raiz = ptu;
 
-		pt->fatBal = 0;
 		pt = ptu;
 	}
 	else { // rota��o dupla esquerda
@@ -126,12 +134,12 @@ void arvAVL::caso2(avlNo* &pt, bool &h) {
 		pt->dir = aux->esq;
 		aux->esq = pt;
 
-		if (aux->fatBal = 1)
+		if (aux->fatBal == 1)
 			pt->fatBal = -1;
 		else
 			pt->fatBal = 0;
 
-		if (aux->fatBal = -1)
+		if (aux->fatBal == -1)
 			ptu->fatBal = 1;
 		else
 			ptu->fatBal = 0;
@@ -139,6 +147,7 @@ void arvAVL::caso2(avlNo* &pt, bool &h) {
 		pt = aux;
 	}
 	pt->fatBal = 0;
+
 	h = false;
 
 }
@@ -160,6 +169,8 @@ void arvAVL::rmv(const int& valor) {
 
 void arvAVL::rmv_AVL(int x, avlNo* &pt, bool &h) {
 	// Valor encontrado. Faz as operações de substituição do nó pelo seu sucessor, garantindo o balanceamento
+
+
 	if (pt->val == x) {
 		if ((pt->dir == NULL) && (pt->esq == NULL)) {
 			avlNo *q = pt;
@@ -195,16 +206,13 @@ void arvAVL::rmv_AVL(int x, avlNo* &pt, bool &h) {
 			if (h == true)
 				switch (pt->fatBal){
 				    case -1:
-				        //fazer algo
 				        pt->fatBal = 0;
                         break;
                     case 0:
-                        //fazer algo
                         pt->fatBal = 1;
                         h = false;
                         break;
                     case 1:
-                        //fazer algo
                         caso2(pt, h);
                         break;
 				}
@@ -215,13 +223,14 @@ void arvAVL::rmv_AVL(int x, avlNo* &pt, bool &h) {
             if (h == true)
                 switch (pt->fatBal){
                     case -1:
-                        //fazer algo
+                        caso1(pt, h);
                         break;
                     case 0:
-                        //fazer algo
+                        pt->fatBal = -1;
+                        h = false;
                         break;
                     case 1:
-                        //fazer algo
+                        pt->fatBal = 0;
                         break;
                 }
         }
@@ -235,11 +244,17 @@ void arvAVL::substitui_succ(avlNo* &pt, int &aux) {
 		substitui_succ(pt->esq, aux);
 
 		if (h == true)
-			switch (pt->fatBal)
-		{
-			case -1: pt->fatBal = 0; break;
-			case 0: pt->fatBal = 1; h = false; break;
-			case 1: caso2(pt, h); break;
+			switch (pt->fatBal){
+                case -1:
+                    pt->fatBal = 0;
+                    break;
+                case 0:
+                    pt->fatBal = 1;
+                    h = false;
+                    break;
+                case 1:
+                    caso2(pt, h);
+                    break;
 		}
 	}
 	else {
