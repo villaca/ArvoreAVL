@@ -1,3 +1,11 @@
+/*
+ * Grupo 4
+ * Daniel Villaça
+ * Gabriel Teixeira
+ * Thiago Albuquerque
+ *
+ */
+
 #include "arvAVL.h"
 #include <cstdlib>
 #include <iostream>
